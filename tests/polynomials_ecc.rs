@@ -1,6 +1,6 @@
-use bls12_381::Scalar;
+use bls12_381::{G1Projective, Scalar};
 use ff::Field;
-use polynomials_ecc::{Domain, Polynomial};
+use polynomials_ecc::{Domain, Polynomial, msm};
 use rand::rngs::OsRng;
 
 #[test]
@@ -18,4 +18,23 @@ fn test_evaluate_interpolate() {
     let polynomial_p = evaluations.interpolate(&domain);
 
     assert_eq!(polynomial, polynomial_p);
+}
+
+#[test]
+fn test_msm() {
+    let mut scalars = vec![];
+    let mut points = vec![];
+
+    for _ in 0..10 {
+        scalars.push(Scalar::random(&mut OsRng));
+        points.push(G1Projective::generator() * Scalar::random(&mut OsRng));
+    }
+
+    let mut naive_mult = G1Projective::identity();
+    for i in 0..10 {
+        naive_mult += points[i] * scalars[i];
+    }
+
+    let pipp_mult = msm(&points, &scalars).expect("MSM succeeded.");
+    assert_eq!(naive_mult, pipp_mult);
 }
