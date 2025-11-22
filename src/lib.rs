@@ -6,7 +6,7 @@
 //! efficient multi scalar multiplication.
 
 #![deny(missing_docs)]
-
+#[doc = include_str!("../README.md")]
 mod domain;
 pub use domain::Domain;
 

@@ -7,7 +7,7 @@ use rand::rngs::OsRng;
 fn test_evaluate_interpolate() {
     let domain = Domain::new(14);
 
-    let mut coeffs = vec![Scalar::random(&mut OsRng)];
+    let mut coeffs = vec![];
     for _ in 0..10000 {
         coeffs.push(Scalar::random(&mut OsRng));
     }
